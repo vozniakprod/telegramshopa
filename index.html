@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+<link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+
+<div class="p-2">
+  <div class="navbar rounded-xl bg-base-100 shadow-lg">
+    <div class="navbar-start"></div>
+    <div class="navbar-center">
+      <img class="w-14" src="https://logos.gpcdn.pl/loga-firm/1074088427/ee4d0000-5df0-0015-87d6-08dbb915cc21_280x280.png" alt="" />
+    </div>
+    <div class="navbar-end"></div>
+  </div>
+<h3 class="text-xl font-bold text-center mt-10">UWAGI ANONIMOWE</h3>
+
+  <div class="card mt-6 shadow-lg">
+    <div class="card-body p-4">
+      <textarea id="message" class="textarea textarea-bordered h-48" placeholder="Wpisz wiadomość tutaj..."></textarea>
+      <div class="card-actions justify-center">
+        <button class="btn w-[100%]" onclick="sendTelegramMessage()">Wyślij</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function sendTelegramMessage() {
+  var message = document.getElementById('message').value;
+  var botToken = '5963852842:AAGOrMgrXXuJbz9fKT09CNIGcWHqQmzUUMU';
+  var chatId = '647847147'; // Replace with your chat ID
+  var url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+  var data = {
+    chat_id: chatId,
+    text: message
+  };
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.ok) {
+      alert('Wiadomość wysłana pomyślnie!');
+    } else {
+      alert('Wysłanie wiadomości nie powiodło się.');
+    }
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+    alert('Wysłanie wiadomości nie powiodło się.');
+  });
+}
+</script>
+
+</body>
+</html>
