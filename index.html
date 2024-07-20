@@ -4,8 +4,9 @@
 <title>Page Title</title>
 <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
 <script src="https://cdn.tailwindcss.com"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body class="w-screen h-screen">
+<body>
 
 <div class="p-2">
   <div class="navbar rounded-xl bg-base-100 shadow-lg">
@@ -57,7 +58,7 @@ function sendTelegramMessage() {
   })
   .catch((error) => {
     console.error('Error:', error);
-    alert('Wysłanie wiadomości nie powiodło się.');
+    alert('Wysłanie wiadomości nie повiodło się.');
   });
 }
 </script>
