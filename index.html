@@ -49,8 +49,8 @@ function sendTelegramMessage() {
   .then(response => response.json())
   .then(data => {
     if (data.ok) {
+      document.getElementById('message').value = '';
       alert('Wiadomość wysłana pomyślnie!');
-      message.value = '';
     } else {
       alert('Wysłanie wiadomości nie powiodło się.');
     }
