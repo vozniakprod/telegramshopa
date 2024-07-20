@@ -50,6 +50,7 @@ function sendTelegramMessage() {
   .then(data => {
     if (data.ok) {
       alert('Wiadomość wysłana pomyślnie!');
+      message.value = '';
     } else {
       alert('Wysłanie wiadomości nie powiodło się.');
     }
