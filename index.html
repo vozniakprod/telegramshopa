@@ -1,67 +1,106 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-<title>Page Title</title>
-<link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
-<script src="https://cdn.tailwindcss.com"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин порошков</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1em;
+            text-align: center;
+        }
+        #city-select {
+            width: 100%;
+            padding: 1em;
+            margin-bottom: 1em;
+        }
+        #product-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1em;
+            padding: 1em;
+        }
+        .product {
+            border: 1px solid #ccc;
+            padding: 1em;
+            width: calc(25% - 2em);
+            box-sizing: border-box;
+        }
+        .add-to-cart {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.5em;
+            cursor: pointer;
+        }
+        .cart {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f9f9f9;
+            border-top: 1px solid #ccc;
+            padding: 1em;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
 </head>
-<body class="h-[100%]">
-
-<div class="p-2">
-  <div class="navbar rounded-xl bg-base-100 shadow-lg">
-    <div class="navbar-start"></div>
-    <div class="navbar-center">
-      <img class="w-14" src="https://logos.gpcdn.pl/loga-firm/1074088427/ee4d0000-5df0-0015-87d6-08dbb915cc21_280x280.png" alt="" />
+<body>
+    <header>
+        <h1>Магазин порошков для стирки на развес</h1>
+    </header>
+    
+    <select id="city-select">
+        <option value="">Выберите город</option>
+        <option value="Москва">Москва</option>
+        <option value="Санкт-Петербург">Санкт-Петербург</option>
+        <option value="Новосибирск">Новосибирск</option>
+        <!-- Добавьте больше городов по необходимости -->
+    </select>
+    
+    <div id="product-list"></div>
+    
+    <div class="cart">
+        <div>Корзина: <span id="cart-count">0</span> товаров</div>
+        <button onclick="checkout()">Оформить заказ</button>
     </div>
-    <div class="navbar-end"></div>
-  </div>
-<h3 class="text-xl font-bold text-center mt-10">UWAGI ANONIMOWE</h3>
+    
+    <script>
+        const products = [];
+        for (let i = 1; i <= 20; i++) {
+            products.push({ id: i, name: `Порошок для стирки №${i}`, price: (10 + i).toFixed(2) });
+        }
+        
+        const productList = document.getElementById('product-list');
+        const cartCount = document.getElementById('cart-count');
+        const cart = [];
 
-  <div class="card mt-6 shadow-lg">
-    <div class="card-body p-4">
-      <textarea id="message" class="textarea textarea-bordered h-48 text-base" placeholder="Wpisz wiadomość tutaj..."></textarea>
-      <div class="card-actions justify-center">
-        <button class="btn w-[100%]" onclick="sendTelegramMessage()">Wyślij</button>
-      </div>
-    </div>
-  </div>
-</div>
+        products.forEach(product => {
+            const productDiv = document.createElement('div');
+            productDiv.className = 'product';
+            productDiv.innerHTML = `
+                <h2>${product.name}</h2>
+                <p>Цена: ${product.price} руб/кг</p>
+                <button class="add-to-cart" onclick="addToCart(${product.id})">Добавить в корзину</button>
+            `;
+            productList.appendChild(productDiv);
+        });
 
-<script>
-function sendTelegramMessage() {
-  var message = document.getElementById('message').value;
-  var botToken = '5963852842:AAGOrMgrXXuJbz9fKT09CNIGcWHqQmzUUMU';
-  var chatId = '647847147'; // Replace with your chat ID
-  var url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+        function addToCart(productId) {
+            cart.push(productId);
+            cartCount.innerText = cart.length;
+        }
 
-  var data = {
-    chat_id: chatId,
-    text: message
-  };
-
-  fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.ok) {
-      document.getElementById('message').value = '';
-      alert('Wiadomość wysłana pomyślnie!');
-    } else {
-      alert('Wysłanie wiadomości nie powiodło się.');
-    }
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-    alert('Wysłanie wiadomości nie повiodło się.');
-  });
-}
-</script>
-
+        function checkout() {
+            alert('Оформление заказа в разработке');
+        }
+    </script>
 </body>
 </html>
