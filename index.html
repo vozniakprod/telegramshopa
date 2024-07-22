@@ -3,195 +3,247 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Магазин порошков</title>
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background-color: #1e1e1e;
-            color: #fff;
+        /* Custom CSS to control dropdown visibility */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%; /* Position dropdown below the button */
+            left: 0;
+            z-index: 50;
+            width: 100%; /* Ensure the dropdown takes the full width of its parent */
         }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 1em;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-        }
-        #city-select {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            background-color: #444;
-            color: #fff;
-        }
-        #product-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            padding: 10px;
-        }
-        .product {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 10px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(10px);
-        }
-        .add-to-cart {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .cart-toggle {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 1000;
-        }
-        .cart {
-            position: fixed;
-            bottom: -100%;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            backdrop-filter: blur(10px);
-            transition: bottom 0.3s ease-in-out;
-            z-index: 999;
-        }
-        .cart.visible {
-            bottom: 0;
-        }
-        .cart button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
+
+        .dropdownn.open .dropdown-content {
+            display: block;
         }
     </style>
 </head>
-<body>
-    <header>
-        <h1>Магазин порошков</h1>
-    </header>
+<body class="h-screen bg-gray-100 overflow-hidden flex flex-col">
     
-    <select id="city-select" onchange="updateCity()">
-        <option value="">Выберите город</option>
-        <option value="Москва">Москва</option>
-        <option value="Санкт-Петербург">Санкт-Петербург</option>
-        <option value="Новосибирск">Новосибирск</option>
-        <!-- Добавьте больше городов по необходимости -->
-    </select>
-    
-    <div id="product-list"></div>
-    
-    <button class="cart-toggle" onclick="toggleCart()">Корзина (<span id="cart-count">0</span>)</button>
-    
-    <div class="cart" id="cart">
-        <div>Корзина: <span id="cart-count-detail">0</span> товаров</div>
-        <div id="cart-items"></div>
-        <div>Итого: <span id="total-price">0</span> руб</div>
-        <div>Город: <span id="selected-city">Не выбран</span></div>
-        <button onclick="checkout()">Оформить заказ</button>
-        <button onclick="toggleCart()">Закрыть</button>
-    </div>
-    
-    <script>
-        const products = [];
-        for (let i = 1; i <= 10; i++) {
-            products.push({ id: i, name: `Порошок для стирки №${i}`, price: (10 + i).toFixed(2) });
-        }
-        
-        const productList = document.getElementById('product-list');
-        const cartCount = document.getElementById('cart-count');
-        const cartCountDetail = document.getElementById('cart-count-detail');
-        const cartItems = document.getElementById('cart-items');
-        const totalPrice = document.getElementById('total-price');
-        const selectedCity = document.getElementById('selected-city');
-        const cartElement = document.getElementById('cart');
-        const cart = [];
-        let city = '';
-
-        products.forEach(product => {
-            const productDiv = document.createElement('div');
-            productDiv.className = 'product';
-            productDiv.innerHTML = `
-                <div>
-                    <h2>${product.name}</h2>
-                    <p>Цена: ${product.price} руб/кг</p>
+    <!-- Navbar -->
+    <div class="navbar bg-base-300 gap-4 px-4 py-2">
+        <!-- City Selector -->
+        <div class="flex-1 relative">
+            <div class="dropdownn w-full">
+                <div class="btn w-full cursor-pointer">Выберите город</div>
+                <ul class="dropdown-content menu bg-base-100 rounded-lg shadow-lg mt-2 z-50 w-full p-2">
+                    <li><a href="#">Москва</a></li>
+                    <li><a href="#">Санкт-Петербург</a></li>
+                    <li><a href="#">Новосибирск</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- Cart Button -->
+        <div class="flex-none">
+            <button onclick="document.getElementById('my_modal_2').showModal()" class="btn btn-ghost btn-circle">
+                <div class="indicator">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span class="badge badge-sm indicator-item">8</span>
                 </div>
-                <button class="add-to-cart" onclick="addToCart(${product.id})">+</button>
-            `;
-            productList.appendChild(productDiv);
+            </button>
+        </div>
+    </div>
+
+    <!-- Button Group -->
+    <div class="flex p-4 gap-2 justify-center">
+        <button class="btn btn-sm">Small</button>
+        <button class="btn btn-sm">Small</button>
+        <button class="btn btn-sm">Small</button>
+        <button class="btn btn-sm">Small</button>
+        <button class="btn btn-sm">Small</button>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="flex-1 p-4 pt-0 overflow-auto">
+        <div id="product-container" class="grid grid-cols-2 gap-4">
+            <!-- Product cards will be inserted here -->
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <dialog id="my_modal_2" class="modal modal-bottom">
+        <div class="modal-box overflow-hidden">
+            <!-- Cart Header -->
+            <div class="flex items-center justify-center mb-6">
+                <h1 class="text-2xl font-semibold text-gray-900">Корзина</h1>
+            </div>
+
+            <!-- Cart Content -->
+            <div class="card overflow-auto max-h-[calc(100vh-10rem)]">
+                <div class="bg-white shadow">
+                    <div class="p-4">
+                        <div class="flow-root">
+                            <ul class="-my-8">
+                                <!-- Cart Item -->
+                                <li class="flex flex-col space-y-3 py-8 ">
+                                    <div class="shrink-0">
+                                        <img class="h-24 w-24 max-w-full rounded-lg object-cover" src="" alt="">
+                                    </div>
+                                    <div class="relative flex flex-1 flex-col justify-between">
+                                        <div class="sm:grid sm:grid-cols-2 sm:gap-5">
+                                            <div class="pr-8 sm:pr-5">
+                                                <p class="text-base font-semibold text-gray-900">Nike Air Max 2019</p>
+                                                <p class="mt-1 text-sm text-gray-400">36EU - 4US</p>
+                                            </div>
+                                            <div class="mt-4 flex items-end justify-between sm:mt-0 sm:items-start sm:justify-end">
+                                                <p class="text-base font-semibold text-gray-900">$259.00</p>
+                                                <div class="flex h-8 items-stretch">
+                                                    <button class="flex items-center justify-center rounded-l-md bg-gray-200 px-4 transition hover:bg-black hover:text-white">-</button>
+                                                    <div class="flex w-full items-center justify-center bg-gray-100 px-4 text-xs uppercase">1</div>
+                                                    <button class="flex items-center justify-center rounded-r-md bg-gray-200 px-4 transition hover:bg-black hover:text-white">+</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="absolute top-0 right-0 flex">
+                                            <button type="button" class="flex rounded p-2 text-gray-500 transition-all duration-200 ease-in-out hover:text-gray-900">
+                                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- Additional Cart Items (if any) -->
+                            </ul>
+                        </div>
+
+                        <!-- Cart Summary -->
+                        <div class="mt-6 border-t border-b py-2">
+                            <div class="flex items-center justify-between">
+                                <p class="text-sm text-gray-400">Subtotal</p>
+                                <p class="text-lg font-semibold text-gray-900">$399.00</p>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <p class="text-sm text-gray-400">Shipping</p>
+                                <p class="text-lg font-semibold text-gray-900">Бесплатно</p>
+                            </div>
+                        </div>
+                        <div class="mt-6 flex items-center justify-between">
+                            <p class="text-sm font-medium text-gray-900">Total</p>
+                            <p class="text-2xl font-semibold text-gray-900"><span class="text-xs font-normal text-gray-400">USD</span> 408.00</p>
+                        </div>
+
+                        <!-- Checkout Button -->
+                        <div class="mt-6 text-center">
+                            <button type="button" class="group inline-flex w-full items-center justify-center rounded-md bg-gray-900 px-6 py-4 text-lg font-semibold text-white transition-all duration-200 ease-in-out hover:bg-gray-800">
+                                Checkout
+                                <svg xmlns="http://www.w3.org/2000/svg" class="group-hover:ml-8 ml-4 h-6 w-6 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Close Button -->
+            <form method="dialog">
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </dialog>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdown = document.querySelector('.dropdownn');
+            const button = dropdown.querySelector('.btn');
+            const menuItems = dropdown.querySelectorAll('.dropdown-content li a');
+
+            // Toggle dropdown menu on button click
+            button.addEventListener('click', function(event) {
+                event.stopPropagation(); // Prevents the event from bubbling up and causing unintended behavior
+                dropdown.classList.toggle('open');
+            });
+
+            // Handle menu item selection
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent default link behavior
+
+                    // Update the button text with the selected city
+                    button.textContent = this.textContent;
+
+                    // Close the dropdown menu
+                    dropdown.classList.remove('open');
+                });
+            });
+
+            // Close the dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!dropdown.contains(event.target)) {
+                    dropdown.classList.remove('open');
+                }
+            });
         });
 
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            cart.push(product);
-            cartCount.innerText = cart.length;
-            cartCountDetail.innerText = cart.length;
-            updateCart();
-        }
-
-        function updateCart() {
-            cartItems.innerHTML = '';
-            let total = 0;
-            cart.forEach(product => {
-                const cartItem = document.createElement('div');
-                cartItem.className = 'cart-item';
-                cartItem.innerHTML = `<span>${product.name}</span><span>${product.price} руб</span>`;
-                cartItems.appendChild(cartItem);
-                total += parseFloat(product.price);
-            });
-            totalPrice.innerText = total.toFixed(2);
-        }
-
-        function toggleCart() {
-            cartElement.classList.toggle('visible');
-        }
-
-        function updateCity() {
-            city = document.getElementById('city-select').value;
-            selectedCity.innerText = city ? city : 'Не выбран';
-        }
-
-        function checkout() {
-            if (cart.length === 0) {
-                alert('Корзина пуста!');
-                return;
+        // Example array of products
+        const products = [
+            {
+                id: 1,
+                imageUrl: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=500&q=60",
+                title: "Nike Air MX Super 2500 - Red",
+                price: "$449",
+                link: "#"
+            },
+            {
+                id: 2,
+                imageUrl: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=500&q=60",
+                title: "Nike Air MX Super 2500 - Blue",
+                price: "$459",
+                link: "#"
+            },
+            {
+                id: 3,
+                imageUrl: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=500&q=60",
+                title: "Nike Air MX Super 2500 - Green",
+                price: "$469",
+                link: "#"
             }
-            if (!city) {
-                alert('Пожалуйста, выберите город!');
-                return;
-            }
-            alert('Оформление заказа в разработке');
+        ];
+
+        // Function to generate HTML for a product card
+        function generateProductCard(product) {
+            return `
+                <div class="card relative flex flex-col overflow-hidden bg-white shadow-md max-w-xs p-2">
+                    <a class="relative flex h-40 overflow-hidden rounded-lg" href="${product.link}">
+                        <img class="object-cover w-full h-full" src="${product.imageUrl}" alt="product image">
+                    </a>
+                    <div class="mt-2 px-3 pb-3">
+                        <a href="${product.link}">
+                            <h5 class="text-lg font-semibold text-slate-900">${product.title}</h5>
+                        </a>
+                        <div class="mt-1 mb-3 flex items-center justify-between">
+                            <p class="text-xl font-bold text-slate-900">${product.price}</p>
+                        </div>
+                        <a href="${product.link}" class="flex items-center justify-center rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            Купить
+                        </a>
+                    </div>
+                </div>
+            `;
         }
+
+        // Function to render all product cards
+        function renderProductCards(products) {
+            const container = document.getElementById('product-container');
+            container.innerHTML = products.map(generateProductCard).join('');
+        }
+
+        // Call the function to render product cards
+        renderProductCards(products);
     </script>
 </body>
 </html>
